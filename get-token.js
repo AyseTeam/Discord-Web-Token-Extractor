@@ -1,26 +1,19 @@
 /**
- * Discord Token Extractor
+ * Discord Token Extractor (Iframe Method)
  * Coded by @AyseTeam
  */
 
-window.webpackChunkdiscord_app.push([
-    [Symbol()],
-    {},
-    o => {
-        for (let e of Object.values(o.c)) {
-            try {
-                if (!e.exports || e.exports === window) continue;
-                if (e.exports?.getToken) {
-                    token = e.exports.getToken();
-                }
-                for (let o in e.exports) {
-                    if (e.exports?.[o]?.getToken && "IntlMessagesProxy" !== e.exports[o][Symbol.toStringTag]) {
-                        token = e.exports[o].getToken();
-                    }
-                }
-            } catch (err) {}
-        }
+(function() {
+    const iframe = document.createElement("iframe");
+    document.body.appendChild(iframe);
+    const token = JSON.parse(iframe.contentWindow.localStorage.token || null);
+    iframe.remove();
+
+    if (token) {
+        console.log("%c Success! ", "background: #43b581; color: white; font-weight: bold; border-radius: 3px;");
+        console.log("%c Your Token: ", "color: #7289da; font-weight: bold;", token);
+        console.warn("DO NOT SHARE THIS TOKEN WITH ANYONE.");
+    } else {
+        console.error("Token not found. Make sure you are logged in!");
     }
-]);
-window.webpackChunkdiscord_app.pop();
-console.log("%c Your Token: ", "background: #7289da; color: white; font-weight: bold;", token);
+})();
