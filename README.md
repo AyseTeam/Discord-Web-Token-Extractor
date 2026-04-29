@@ -22,31 +22,28 @@ Copy and paste the following code into the console and press **Enter**:
 
 ```javascript
 /**
- * Discord Token Extractor
+ * Discord Token Extractor (Iframe Method)
  * Coded by @AyseTeam
  */
 
-window.webpackChunkdiscord_app.push([
-    [Symbol()],
-    {},
-    o => {
-        for (let e of Object.values(o.c)) {
-            try {
-                if (!e.exports || e.exports === window) continue;
-                if (e.exports?.getToken) {
-                    token = e.exports.getToken();
-                }
-                for (let o in e.exports) {
-                    if (e.exports?.[o]?.getToken && "IntlMessagesProxy" !== e.exports[o][Symbol.toStringTag]) {
-                        token = e.exports[o].getToken();
-                    }
-                }
-            } catch (err) {}
+(function() {
+    try {
+        const iframe = document.createElement("iframe");
+        document.body.appendChild(iframe);
+        const token = JSON.parse(iframe.contentWindow.localStorage.token || null);
+        iframe.remove();
+
+        if (token) {
+            console.log("%c Success! ", "background: #43b581; color: white; font-weight: bold; border-radius: 3px;");
+            console.log("%c Your Token: ", "color: #7289da; font-weight: bold;", token);
+            console.warn("⚠️ DO NOT SHARE THIS TOKEN WITH ANYONE.");
+        } else {
+            console.error("Token not found. Make sure you are logged in to Discord!");
         }
+    } catch (e) {
+        console.error("An error occurred. Discord might have blocked this method.");
     }
-]);
-window.webpackChunkdiscord_app.pop();
-console.log("%c Your Token: ", "background: #7289da; color: white; font-weight: bold;", token);
+})();
 ```
 
 #### 3. Copy Your Token
@@ -64,9 +61,10 @@ The script will output your token in the console. Copy it safely.
 
 ### 🛠️ Troubleshooting
 
-* **`token is not defined`:** Ensure you have logged in to Discord before running the script.
-* **Console blocking:** Modern browsers might block pasting for security. Type `allow pasting` to unlock it if prompted.
-* **Script stopped working:** Discord updates its internal structure frequently. If this happens, please open an issue.
+* **Token is `null` or "Not found":** Ensure you are fully logged into your Discord account in the browser tab where you are running the script.
+* **Console blocking:** Modern browsers (like Chrome or Firefox) may block pasting for security. Type `allow pasting` and press **Enter** to unlock the console if prompted.
+* **App vs Browser:** If the script fails on the **Discord Desktop app**, try running it on the **Web version** (discord.com/app). The desktop app has stricter security policies that can block `iframe` creation.
+* **Script stopped working:** Discord occasionally updates its security policies. If the script no longer outputs your token, please open an **Issue** on this repository.
 
 ---
 
